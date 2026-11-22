@@ -1,0 +1,17 @@
+﻿===== COMMAND =====
+export HOME=/home/sawan
+cd /home/sawan/esim-task4/eSim-2.5
+rm -f /tmp/copy-fn-fixed.sh
+sed -n '/^function copyKicadLibrary$/,/^}/p' install-eSim-scripts/install-eSim-25.04.sh > /tmp/copy-fn-fixed.sh
+bash -c 'source /tmp/copy-fn-fixed.sh; copyKicadLibrary' 2>&1 | tail -8
+echo '--- result ---'
+ls -l /home/sawan/.config/kicad/8.0/sym-lib-table
+
+===== OUTPUT =====
+Using KiCad config directory: /home/sawan/.config/kicad/8.0
+kicad config folder already exists
+symbol table copied in the directory
+--- result ---
+-rw-rw-r-- 1 sawan sawan 37320 Nov 22 20:08 /home/sawan/.config/kicad/8.0/sym-lib-table
+
+

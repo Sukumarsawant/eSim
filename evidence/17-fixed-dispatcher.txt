@@ -1,0 +1,16 @@
+﻿===== COMMAND =====
+rm -rf /tmp/dispatch-fixed && mkdir -p /tmp/dispatch-fixed/install-eSim-scripts
+cp ~/esim-task4/eSim-2.5/install-eSim.sh /tmp/dispatch-fixed/
+cat > /tmp/dispatch-fixed/install-eSim-scripts/install-eSim-25.04.sh <<'EOF'
+echo "STUB VERSION SCRIPT CALLED WITH: $1"
+EOF
+bash -n /tmp/dispatch-fixed/install-eSim.sh && echo 'syntax OK'
+bash /tmp/dispatch-fixed/install-eSim.sh --install
+
+===== OUTPUT =====
+syntax OK
+Detected Ubuntu Version: 25.04 (25.04)
+Running script: /tmp/dispatch-fixed/install-eSim-scripts/install-eSim-25.04.sh --install
+STUB VERSION SCRIPT CALLED WITH: --install
+
+

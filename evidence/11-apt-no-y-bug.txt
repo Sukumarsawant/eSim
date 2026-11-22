@@ -1,0 +1,22 @@
+﻿===== COMMAND =====
+export DEBIAN_FRONTEND=noninteractive
+apt-get purge -y python3-virtualenv >/dev/null 2>&1
+echo '=== apt install without -y ==='
+apt install python3-virtualenv </dev/null 2>&1 | tail -10
+echo "apt_exit=${PIPESTATUS[0]}"
+
+===== OUTPUT =====
+=== apt install without -y ===
+  g++-14-multilib  flex      apache2               make-doc
+  gcc-14-doc       bison     | lighttpd
+  gcc-multilib     gcc-doc   | httpd
+
+Summary:
+  Upgrading: 0, Installing: 47, Removing: 0, Not Upgrading: 149
+  Download size: 65.4 MB
+  Space needed: 225 MB / 16.6 GB available
+
+Continue? [Y/n] Abort.
+apt_exit=1
+
+

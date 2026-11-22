@@ -1,0 +1,13 @@
+﻿===== COMMAND =====
+cd ~/esim-task4/eSim-2.5
+echo '=== bundled installer run ==='
+bash ./install-eSim.sh --install 2>&1
+echo "exit=$?"
+
+===== OUTPUT =====
+=== bundled installer run ===
+Detected Ubuntu Version: 
+Unsupported Ubuntu version: 25.04 ()
+exit=1
+
+

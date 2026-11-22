@@ -1,0 +1,19 @@
+﻿===== COMMAND =====
+
+    python tools\verify_install.py
+
+
+===== OUTPUT =====
+[PASS] bash -n Ubuntu\install-eSim.sh                             syntax OK
+[PASS] bash -n Ubuntu\install-eSim-scripts\install-eSim-25.04.sh  syntax OK
+[PASS] 25.04 case present in dispatcher                           install-eSim.sh routes 25.04 to install-eSim-25.04.sh
+[PASS] version detection uses lsb_release -rs                     avoids empty FULL_VERSION on a two-component version like 25.04
+[PASS] no stray config echoes in dispatcher                       dead config block removed from run_version_script()
+[PASS] installKicad does not exit the installer                   returns from the function instead of exiting the whole script
+[PASS] 25.04 path has no hardcoded KiCad pin                      25.04 uses the unversioned archive package (pin kept only for 24.04)
+[PASS] virtualenv install is non-interactive                      no apt confirmation prompt
+[PASS] KiCad config dir is detected dynamically                   custom symbol table goes to ~/.config/kicad/8.0 on KiCad 8
+
+9/9 checks passed
+
+

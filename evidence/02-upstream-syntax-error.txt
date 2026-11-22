@@ -1,0 +1,16 @@
+﻿===== COMMAND =====
+mkdir -p ~/esim-task4/upstream/Ubuntu/install-eSim-scripts
+cd ~/esim-task4/upstream/Ubuntu
+wget -q https://raw.githubusercontent.com/FOSSEE/eSim/installers/Ubuntu/install-eSim.sh -O install-eSim.sh
+wget -q https://raw.githubusercontent.com/FOSSEE/eSim/installers/Ubuntu/install-eSim-scripts/install-eSim-25.04.sh -O install-eSim-scripts/install-eSim-25.04.sh
+echo '=== bash -n upstream install-eSim.sh ==='
+bash -n install-eSim.sh 2>&1
+echo "syntax_exit=$?"
+
+===== OUTPUT =====
+=== bash -n upstream install-eSim.sh ===
+install-eSim.sh: line 70: syntax error near unexpected token `}'
+install-eSim.sh: line 70: `}'
+syntax_exit=2
+
+

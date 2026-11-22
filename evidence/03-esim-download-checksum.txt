@@ -1,0 +1,28 @@
+﻿===== COMMAND =====
+mkdir -p ~/esim-task4
+cd ~/esim-task4
+wget -q https://static.fossee.in/esim/installation-files/eSim-2.5.zip -O eSim-2.5.zip
+echo '=== sha256sum ==='
+sha256sum eSim-2.5.zip
+unzip -q -o eSim-2.5.zip
+echo '=== extracted top level ==='
+ls eSim-2.5
+
+===== OUTPUT =====
+=== sha256sum ===
+b9860ae26f026930bae589520761f4a57b85d593a2e2cd1ac83d5e5db2f281ed  eSim-2.5.zip
+=== extracted top level ===
+CONTRIBUTION.md
+Examples
+images
+INSTALL
+install-eSim-scripts
+install-eSim.sh
+library
+LICENSE
+nghdl.zip
+README.md
+src
+VERSION
+
+

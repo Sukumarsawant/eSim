@@ -1,0 +1,21 @@
+﻿===== COMMAND =====
+echo '=== installed kicad version ==='
+kicad-cli version
+echo '=== actual config dirs ==='
+ls -d ~/.config/kicad/*
+echo '=== hardcoded path in upstream script ==='
+grep -n 'kicad/6.0' ~/esim-task4/upstream/Ubuntu/install-eSim-scripts/install-eSim-25.04.sh
+
+===== OUTPUT =====
+=== installed kicad version ===
+8.0.8
+=== actual config dirs ===
+/home/sawan/.config/kicad/8.0
+=== hardcoded path in upstream script ===
+234:    if [ -d ~/.config/kicad/6.0 ];then
+237:        echo ".config/kicad/6.0 does not exist"
+238:        mkdir -p ~/.config/kicad/6.0
+242:    cp kicadLibrary/template/sym-lib-table ~/.config/kicad/6.0/
+420:        rm -rf $HOME/.config/kicad/6.0
+
+

@@ -1,0 +1,19 @@
+﻿===== COMMAND =====
+cd ~/esim-task4/eSim-2.5
+echo '=== dispatcher cases ==='
+grep -nE '"[0-9]+\.[0-9]+"\)' install-eSim.sh
+echo '=== available version scripts ==='
+ls install-eSim-scripts
+
+===== OUTPUT =====
+=== dispatcher cases ===
+36:        "22.04")
+43:        "23.04")
+46:        "24.04")
+=== available version scripts ===
+install-eSim-22.04.sh
+install-eSim-23.04.sh
+install-eSim-24.04.sh
+install-eSim-25.04.sh
+
+

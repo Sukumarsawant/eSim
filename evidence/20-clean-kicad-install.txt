@@ -1,0 +1,69 @@
+﻿===== COMMAND =====
+export DEBIAN_FRONTEND=noninteractive
+add-apt-repository --remove -y ppa:kicad/kicad-8.0-releases >/dev/null 2>&1
+apt-get update -qq >/dev/null 2>&1
+apt-get purge -y kicad >/dev/null 2>&1
+echo '=== kicad candidate after PPA removal ==='
+apt-cache policy kicad | head -6
+cd /home/sawan/esim-task4/eSim-2.5/install-eSim-scripts
+rm -f /tmp/kicad-fn-fixed.sh
+sed -n '/^function installKicad$/,/^}/p' install-eSim-25.04.sh > /tmp/kicad-fn-fixed.sh
+source /tmp/kicad-fn-fixed.sh
+installKicad 2>&1 | tail -12
+dpkg-query -W -f='kicad version: ${Version}\n' kicad
+
+===== OUTPUT =====
+=== kicad candidate after PPA removal ===
+kicad:
+  Installed: (none)
+  Candidate: 8.0.8+dfsg-1
+  Version table:
+     8.0.8+dfsg-1 500
+        500 http://in.archive.ubuntu.com/ubuntu plucky/universe amd64 Packages
+Selecting previously unselected package kicad.
+
+(Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 160497 files and directories currently installed.)
+
+Preparing to unpack .../kicad_8.0.8+dfsg-1_amd64.deb ...
+
+Unpacking kicad (8.0.8+dfsg-1) ...
+
+Setting up kicad (8.0.8+dfsg-1) ...
+
+Processing triggers for hicolor-icon-theme (0.18-2) ...
+
+Processing triggers for gnome-menus (3.36.0-1.1ubuntu3) ...
+
+Processing triggers for libc-bin (2.41-6ubuntu1.2) ...
+
+Processing triggers for man-db (2.13.0-1) ...
+
+Processing triggers for shared-mime-info (2.4-5build1) ...
+
+Processing triggers for desktop-file-utils (0.28-1) ...
+
+KiCad installation completed successfully!
+kicad version: 8.0.8+dfsg-1
+
+

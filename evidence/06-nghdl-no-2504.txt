@@ -1,0 +1,29 @@
+﻿===== COMMAND =====
+cd ~/esim-task4/eSim-2.5
+rm -rf /tmp/nghdl-fresh
+unzip -oq nghdl.zip -d /tmp/nghdl-fresh
+cd /tmp/nghdl-fresh/nghdl
+echo '=== NGHDL scripts ==='
+ls install-nghdl-scripts
+echo '=== NGHDL dispatcher run ==='
+bash ./install-nghdl.sh --install 2>&1
+echo "nghdl_exit=$?"
+echo '=== LLVM candidate ==='
+apt-cache policy llvm llvm-dev | grep -E '^(llvm|llvm-dev|  Candidate)'
+
+===== OUTPUT =====
+=== NGHDL scripts ===
+install-nghdl-22.04.sh
+install-nghdl-23.04.sh
+install-nghdl-24.04.sh
+=== NGHDL dispatcher run ===
+Detected Ubuntu Version: 
+Unsupported Ubuntu version: 25.04 ()
+nghdl_exit=1
+=== LLVM candidate ===
+llvm:
+  Candidate: 1:20.0-63ubuntu1
+llvm-dev:
+  Candidate: 1:20.0-63ubuntu1
+
+

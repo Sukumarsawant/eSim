@@ -1,0 +1,37 @@
+﻿===== COMMAND =====
+export DEBIAN_FRONTEND=noninteractive
+add-apt-repository -y ppa:kicad/kicad-8.0-releases >/tmp/ppa.log 2>&1
+apt-get update -qq >/tmp/aptupdate.log 2>&1
+echo '=== kicad policy after PPA ==='
+apt-cache policy kicad | head -12
+echo '=== unversioned install attempt ==='
+apt-get install -y --no-install-recommends kicad 2>&1 | tail -14
+
+===== OUTPUT =====
+=== kicad policy after PPA ===
+kicad:
+  Installed: 8.0.8+dfsg-1
+  Candidate: 8.0.9-0~ubuntu25.04.1
+  Version table:
+     8.0.9-0~ubuntu25.04.1 500
+        500 https://ppa.launchpadcontent.net/kicad/kicad-8.0-releases/ubuntu plucky/main amd64 Packages
+ *** 8.0.8+dfsg-1 500
+        500 http://in.archive.ubuntu.com/ubuntu plucky/universe amd64 Packages
+        100 /var/lib/dpkg/status
+=== unversioned install attempt ===
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ kicad : Depends: libgit2-1.8 (>= 1.8.0) but it is not installable
+E: Unable to correct problems, you have held broken packages.
+E: The following information from --solver 3.0 may provide additional context:
+   Unable to satisfy dependencies. Reached two conflicting decisions:
+   1. kicad:amd64=8.0.9-0~ubuntu25.04.1 is selected as an upgrade
+   2. kicad:amd64=8.0.9-0~ubuntu25.04.1 Depends libgit2-1.8 (>= 1.8.0)
+      but none of the choices are installable:
+      [no choices]
+
+

@@ -1,0 +1,20 @@
+﻿===== COMMAND =====
+cd ~/esim-task4/upstream/Ubuntu/install-eSim-scripts
+sed -n '/^function installKicad$/,/^}/p' install-eSim-25.04.sh > /tmp/kicad-fn-orig.sh
+cat > /tmp/test-kicad-orig.sh <<'EOF'
+source /tmp/kicad-fn-orig.sh
+echo 'before installKicad'
+installKicad
+echo 'after installKicad (should print if function returns)'
+EOF
+bash /tmp/test-kicad-orig.sh 2>&1
+echo "harness_exit=$?"
+
+===== OUTPUT =====
+before installKicad
+Installing KiCad...........................
+Ubuntu 25.04 detected.
+KiCad 8.0 is already installed.
+harness_exit=0
+
+
