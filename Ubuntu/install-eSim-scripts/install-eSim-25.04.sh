@@ -112,9 +112,21 @@ function installKicad
     ubuntu_version=$(lsb_release -rs)
 
     # Define KiCad PPAs based on Ubuntu version
-    if [[ "$ubuntu_version" == "24.04" || "$ubuntu_version" == "25.04" ]]; then
+    # FIX (Ubuntu 25.04): KiCad 8.0.8 is already in the plucky/universe archive.
+    # Adding the kicad-8.0-releases PPA makes apt prefer 8.0.9-0~ubuntu25.04.1,
+    # which depends on libgit2-1.8 -- a library that is not available in 25.04:
+    #   E: Unable to correct problems, you have held broken packages.
+    # So on 25.04 we skip the PPA entirely and install the archive version.
+    kicad_packages="kicad kicad-footprints kicad-libraries kicad-symbols kicad-templates"
+    if [[ "$ubuntu_version" == "25.04" ]]; then
+        echo "Ubuntu $ubuntu_version detected - using KiCad from the Ubuntu archive."
+        kicadppa=""
+    elif [[ "$ubuntu_version" == "24.04" ]]; then
         echo "Ubuntu $ubuntu_version detected."
         kicadppa="kicad/kicad-8.0-releases"
+        # Preserve upstream behaviour for 24.04 (its PPA can publish newer
+        # packages with unsatisfiable dependencies on that release too).
+        kicad_packages="kicad=8.0.8+dfsg-1 kicad-footprints kicad-libraries kicad-symbols kicad-templates"
 
         # Check if KiCad is installed using dpkg-query for the main package
         if dpkg -s kicad &>/dev/null; then
@@ -133,7 +145,11 @@ function installKicad
                 fi
             else
                 echo "KiCad 8.0 is already installed."
-                exit 0
+                # FIX: return from this function only.  The original `exit 0`
+                # terminated the *whole installer*, so NGHDL, SKY130 and the
+                # desktop launcher were never installed on a machine that
+                # already had KiCad 8 (very common on fresh 25.04 installs).
+                return 0
             fi
         fi
 
@@ -141,17 +157,23 @@ function installKicad
         kicadppa="kicad/kicad-6.0-releases"
     fi
 
-    # Check if the PPA is already added
-    if ! grep -q "^deb .*${kicadppa}" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
-        echo "Adding KiCad PPA to local apt repository: $kicadppa"
-        sudo add-apt-repository -y "ppa:$kicadppa"
-        sudo apt-get update
+    # Check if the PPA is already added (skipped on 25.04 where kicadppa is empty)
+    if [[ -n "$kicadppa" ]]; then
+        if ! grep -q "^deb .*${kicadppa}" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
+            echo "Adding KiCad PPA to local apt repository: $kicadppa"
+            sudo add-apt-repository -y "ppa:$kicadppa"
+            sudo apt-get update
+        else
+            echo "KiCad PPA is already present in sources."
+        fi
     else
-        echo "KiCad PPA is already present in sources."
+        echo "Skipping KiCad PPA (Ubuntu archive already provides KiCad 8)."
     fi
 
-    # Install KiCad packages
-    sudo apt-get install -y --no-install-recommends kicad=8.0.8+dfsg-1 kicad-footprints kicad-libraries kicad-symbols kicad-templates
+    # Install KiCad packages.
+    # FIX: on 25.04 use the unversioned archive package instead of the stale
+    # hardcoded `kicad=8.0.8+dfsg-1` pin.
+    sudo apt-get install -y --no-install-recommends $kicad_packages
 
     echo "KiCad installation completed successfully!"
 }
@@ -170,8 +192,10 @@ function installDependency
     set -e      # Re-enable exit on error
     trap error_exit ERR
     
-    echo "Instaling virtualenv......................."
-    sudo apt install python3-virtualenv
+    echo "Installing virtualenv......................"
+    # FIX: `-y` makes this non-interactive.  Without it apt asks for
+    # confirmation and aborts when the installer is run from a script/CI.
+    sudo apt-get install -y python3-virtualenv
    
     echo "Creating virtual environment to isolate packages "
     virtualenv $config_dir/env
@@ -231,15 +255,28 @@ function copyKicadLibrary
     #Extract custom KiCad Library
     tar -xJf library/kicadLibrary.tar.xz
 
-    if [ -d ~/.config/kicad/6.0 ];then
+    # FIX: the upstream script hardcoded ~/.config/kicad/6.0, but KiCad 8
+    # (shipped by Ubuntu 25.04) uses ~/.config/kicad/8.0.  Detect the real
+    # version from kicad-cli so eSim's custom symbols are actually loaded.
+    kicad_version=$(kicad-cli version 2>/dev/null | cut -d'.' -f1,2)
+    if [[ -z "$kicad_version" ]]; then
+        kicad_version=$(ls -1 ~/.config/kicad 2>/dev/null | grep -E '^[0-9]+\.[0-9]+$' | sort -V | tail -1)
+    fi
+    if [[ -z "$kicad_version" ]]; then
+        kicad_version="8.0"
+    fi
+    KICAD_CONFIG_DIR="$HOME/.config/kicad/$kicad_version"
+    echo "Using KiCad config directory: $KICAD_CONFIG_DIR"
+
+    if [ -d "$KICAD_CONFIG_DIR" ];then
         echo "kicad config folder already exists"
-    else 
-        echo ".config/kicad/6.0 does not exist"
-        mkdir -p ~/.config/kicad/6.0
+    else
+        echo "$KICAD_CONFIG_DIR does not exist - creating it"
+        mkdir -p "$KICAD_CONFIG_DIR"
     fi
 
-    # Copy symbol table for eSim custom symbols 
-    cp kicadLibrary/template/sym-lib-table ~/.config/kicad/6.0/
+    # Copy symbol table for eSim custom symbols
+    cp kicadLibrary/template/sym-lib-table "$KICAD_CONFIG_DIR/"
     echo "symbol table copied in the directory"
 
     # Copy KiCad symbols made for eSim
@@ -417,7 +454,7 @@ elif [ $option == "--uninstall" ];then
         sudo apt purge -y kicad kicad-footprints kicad-libraries kicad-symbols kicad-templates
         sudo rm -rf /usr/share/kicad
 	sudo rm /etc/apt/sources.list.d/kicad*
-        rm -rf $HOME/.config/kicad/6.0
+        rm -rf "$HOME/.config/kicad/"[0-9]*.[0-9]*
 
         echo "Removing Virtual env......................."
         sudo rm -r $config_dir/env
