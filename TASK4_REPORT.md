@@ -241,7 +241,17 @@ Evidence: `evidence/15-python-verifier.txt`, `screenshots/15-python-verifier.png
 
 Live checks in the VM confirmed the dispatcher routes 25.04, `installKicad` returns properly, the symbol table lands in the KiCad 8 directory, and KiCad 8.0.8 installs from the Ubuntu archive without the broken PPA.
 
-## 7. Expected vs done checklist
+## 7. How this maps to the evaluation criteria
+
+**Documentation quality.** This report walks through each bug with the command that exposed it, the output, the root cause, the change made, and a verification result. The repository also keeps the original command outputs in `evidence/` and matching command-and-output images in `screenshots/`, so a reader can follow what was tried and why each fix was needed.
+
+**Number of issues reported.** Seven issues are documented in §5.
+
+**Number of issues fixed.** Six of the seven are fixed in the two installer scripts. The remaining one is inside the bundled `nghdl.zip` and is documented as an upstream item.
+
+**Difficulty of the problems fixed.** The fixes sit on the main GUI dependency path, not just the smaller blocks: dispatcher syntax, Ubuntu 25.04 routing, the KiCad PPA/`libgit2-1.8` failure, the premature `exit 0`, the KiCad 8 config directory, and the non-interactive `apt` call. Only NGHDL/LLVM is left unfixed.
+
+## 8. Expected vs done checklist
 
 | Expected by the task | Status | Where |
 |---|---|---|
@@ -250,18 +260,48 @@ Live checks in the VM confirmed the dispatcher routes 25.04, `installKicad` retu
 | List problems faced, including dependency issues | Done | 7 issues in §5 |
 | Inspect and change `install-eSim.sh` | Done | Dispatcher rewritten |
 | Fix at least one issue | Done | 6 issues fixed |
-| Use Bash Script | Done | Installer inspection and patching |
+| Use Bash Script | Done | Installer inspection, patching and reproduction commands |
 | Use Python | Done | Static verification, evidence in §6 |
-| Use eSim | Done | eSim 2.5 ZIP downloaded and installed |
-| Refer to Git / Spoken Tutorial on Git | Done | Fork, branch and commits used |
-| Use Ubuntu 25.04 OS | Done | All reproduction in the VM |
+| Use eSim | Done | eSim 2.5 ZIP downloaded, checksummed and installed |
+| Refer to Git / Spoken Tutorial on Git | Done | Fork/branch/commit workflow; task link noted in §3 |
+| Use Ubuntu 25.04 OS | Done | All reproduction performed in the VM |
 | Create a well-documented report | Done | This file |
 | Fork the repository | Done | `Sukumarsawant/eSim` |
 | Checkout the installer branch | Done as `installers` | Real branch name explained in §2 |
 | Commit code files | Done | Two installer scripts committed |
 | Share fork link and report by email | Pending | To be done after pushing |
 
-## 8. Files changed
+## 9. Technologies used
+
+- **Bash Script** — the installer scripts were inspected, reproduced and patched with Bash.
+- **Python** — a small static check was used during preparation; its output is in §6.
+- **eSim** — the official eSim 2.5 ZIP was downloaded, verified and installed.
+- **Git / Spoken Tutorial on Git** — the fork, upstream remote, `installers` branch and commits follow the Git workflow referenced by the task.
+- **Ubuntu 25.04 OS** — the VirtualBox guest used for every reproduction and verification.
+
+## 10. Submission procedure
+
+| Step | Status |
+|---|---|
+| Create a GitHub account | Done — `Sukumarsawant` |
+| Fork `FOSSEE/eSim` | Done — `https://github.com/Sukumarsawant/eSim` |
+| Checkout the installer branch | Done as `installers` (the real branch name) |
+| Commit the code files | Done — both installer scripts are committed and pushed |
+| Mail the fork link and report to `contact-esim@fossee.in` | Pending |
+
+Email subject to use:
+
+```text
+eSim Semester Long Internship - Autumn 2026 Submission Task 4
+```
+
+Fork link to include:
+
+```text
+https://github.com/Sukumarsawant/eSim/tree/installers
+```
+
+## 11. Files changed
 
 ```text
 Ubuntu/install-eSim.sh
