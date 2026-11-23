@@ -4,6 +4,7 @@ FOSSEE eSim Semester Long Internship — Autumn 2026
 
 Candidate: Sukumar Sawant  
 Date: 22 November 2026  
+Final review: 23 November 2026  
 Upstream: https://github.com/FOSSEE/eSim  
 Fork: https://github.com/Sukumarsawant/eSim  
 Branch: `installers`
@@ -300,6 +301,8 @@ Fork link to include:
 ```text
 https://github.com/Sukumarsawant/eSim/tree/installers
 ```
+
+Final review was completed on 23 November 2026. Both installer scripts pass `bash -n`, all report links resolve, and the fork branch matches the local branch.
 
 ## 11. Files changed
 
