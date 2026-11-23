@@ -1,6 +1,6 @@
 # Task 4 — eSim Upgradation (CSE and related fields)
 
-FOSSEE eSim Semester Long Internship — Autumn 2026
+FOSSEE eSim Winter Internship — 2026
 
 Candidate: Sukumar Sawant  
 Date: 22 November 2026  
@@ -293,8 +293,10 @@ Live checks in the VM confirmed the dispatcher routes 25.04, `installKicad` retu
 Email subject to use:
 
 ```text
-eSim Semester Long Internship - Autumn 2026 Submission Task 4
+eSim Winter Internship - 2026 Submission Task 4
 ```
+
+The task DOCX still shows an older "Autumn 2026" wording in this line, but the official eSim internship page (last updated 17 November 2026) uses the Winter wording above, so that is the subject used here.
 
 Fork link to include:
 
